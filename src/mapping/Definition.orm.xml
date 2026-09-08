@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Mapping for CoolMS\Field\Entity\Definition.
+
+    XML, not attributes: Domain must not import the ORM. This file is the
+    Field module's half of the rule coolms/core already follows, and it
+    travels to coolms/field-doctrine when the module is extracted.
+
+    !! THIS FILE DECLARES THE ENTITY'S OWN COLUMNS AND NOTHING ELSE. `id` and
+    `sortOrder` are deliberately absent: they come from IdentifierProviderTrait
+    and OrderProviderTrait, which carry CoolMS\Core\Mapping attributes that
+    TraitMappingDriver translates earlier in the driver chain. The trait is
+    their single source of truth, and repeating them here would make each one a
+    two-source field, which is how a trait-level change becomes a silent
+    per-entity divergence.
+
+    That is not theoretical. The first version of this file did declare
+    `sortOrder`, and it dropped the `['default' => 0]` the trait sets, which
+    showed up as one line of schema drift: `ALTER sort_order DROP DEFAULT`.
+
+    Written against the RESOLVED metadata rather than transcribed from the
+    class, because the class does not show the trait-contributed columns at
+    all, and a field the driver never sees is simply not mapped - nothing
+    reports it.
+
+    The repository-class is an INTERFACE, which is unusual and is preserved
+    verbatim: the entity declared it that way (with a phpstan-ignore on the
+    attribute) and the container resolves it. Changing it here would be a
+    behaviour change wearing the clothes of a format conversion.
+-->
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+                                      https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+
+    <entity name="CoolMS\Field\Entity\Definition"
+            table="coolms_field_definitions"
+            repository-class="CoolMS\Field\Repository\DefinitionRepositoryInterface">
+
+        <indexes>
+            <index name="idx_field_definitions_entity_alias" columns="entity_alias"/>
+        </indexes>
+
+        <!--
+            #1165 - the (entity_alias, name) pair is the find-or-create key in
+            DbFieldOverrideStorage::findExisting + FieldDefinitionSyncWarmer.
+            Enforced at the DB so a duplicate cannot silently orphan a row and
+            desync save/delete; mirrors the sibling FormConfigOverride.
+        -->
+        <unique-constraints>
+            <unique-constraint name="uniq_field_definitions_entity_alias_name" columns="entity_alias,name"/>
+        </unique-constraints>
+
+        <!--
+            Denormalized from the owning entity type so ExtrasFieldMappingDriver
+            can answer at boot with one DBAL query:
+              SELECT name, type FROM coolms_field_definitions WHERE entity_alias = ?
+        -->
+        <field name="entityAlias" column="entity_alias" type="string" length="64"/>
+        <field name="name" column="name" type="string" length="64"/>
+
+        <!-- The WIDGET word, not the storage type. FieldTypeMap is the only
+             thing that may translate it into a DATA_TYPES member. -->
+        <field name="type" column="type" type="string" length="32"/>
+
+        <field name="validationRules" column="validation_rules" type="json"/>
+        <field name="options" column="options" type="json"/>
+        <field name="normalizationGroups" column="normalization_groups" type="json"/>
+        <field name="denormalizationGroups" column="denormalization_groups" type="json"/>
+        <field name="serializerConfig" column="serializer_config" type="json"/>
+        <field name="formConfig" column="form_config" type="json"/>
+        <field name="apiConfig" column="api_config" type="json"/>
+
+    </entity>
+
+</doctrine-mapping>
