@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Standalone suite for coolms/field.
+    Standalone suite for coolms/field-doctrine.
 
-    The consuming application points its own `core` testsuite at this
-    same `tests/` directory, so one set of files runs from both places and
-    the two cannot disagree about what passes.
+    !! THERE ARE NO TESTS HERE YET, so this config runs nothing and the
+    package's CI proves nothing. It is left pointing at `tests/` because
+    that is where they go, not because they exist. The application does
+    NOT mount this directory for the same reason.
 -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
