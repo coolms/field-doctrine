@@ -42,10 +42,12 @@
         </indexes>
 
         <!--
-            #1165 - the (entity_alias, name) pair is the find-or-create key in
-            DbFieldOverrideStorage::findExisting + FieldDefinitionSyncWarmer.
-            Enforced at the DB so a duplicate cannot silently orphan a row and
-            desync save/delete; mirrors the sibling FormConfigOverride.
+            The (entity_alias, name) pair is the find-or-create key used by the
+            override storage and the definition sync warmer, so it is enforced
+            at the database: without the constraint a duplicate row can be
+            created that neither of them will ever find again, silently
+            orphaning it and desyncing save from delete. The sibling form
+            config override carries the same constraint for the same reason.
         -->
         <unique-constraints>
             <unique-constraint name="uniq_field_definitions_entity_alias_name" columns="entity_alias,name"/>

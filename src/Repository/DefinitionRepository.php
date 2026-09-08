@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CoolMS\Field\Doctrine\Repository;
 
+use CoolMS\Core\Doctrine\Repository\DoctrineRepository;
+use CoolMS\Entity\Repository\OrderableRepositoryInterface;
 use CoolMS\Field\Entity\Definition;
 use CoolMS\Field\Entity\DefinitionInterface;
 use CoolMS\Field\Repository\DefinitionRepositoryInterface;
-use CoolMS\Core\Doctrine\Repository\DoctrineRepository;
-use CoolMS\Entity\Repository\OrderableRepositoryInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
