@@ -9,6 +9,15 @@ major number means here.
 Every entry in this file was written in the same commit as the change it
 describes. Nothing here is reconstructed.
 
+## Unreleased
+
+### Added
+
+- Declares `support` -- `issues` and `source` -- so a page imported from this
+  package, and the catalogue, know where a correction is filed. Packagist filled
+  the gap from GitHub when the manifest was silent; the declared field is the
+  one that holds on any registry.
+
 ## 2.0.0-alpha1 - 2026-09-10
 
 **A pre-release. It carries no compatibility promise**, which is the honest
