@@ -9,6 +9,14 @@ Versioning is described in the [CoolMS contributing guide](https://github.com/co
 Every entry in this file was written in the same commit as the change it
 describes. Nothing here is reconstructed.
 
+## Unreleased
+
+### Added
+
+- README.md: why the mapping is XML and how an application points Doctrine at
+  it, what is mapped, the repository, the entity field-name resolver, and what
+  it requires.
+
 ## 2.0.0-alpha2 - 2026-10-07
 
 ### Added
